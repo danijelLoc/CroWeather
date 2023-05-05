@@ -1,7 +1,7 @@
 ﻿
 namespace CroWeatherUpdateService
 {
-    partial class Service1
+    partial class CroWeatherUpdateService
     {
         /// <summary> 
         /// Required designer variable.
@@ -30,7 +30,7 @@ namespace CroWeatherUpdateService
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
-            this.ServiceName = "Service1";
+            this.ServiceName = "CroWeatherUpdateService";
         }
 
         #endregion

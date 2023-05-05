@@ -12,63 +12,67 @@ namespace CroWeatherUpdateService.Model
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int id { get; set; }
-        public Coord coord { get; set; }
-        public Sys sys { get; set; }
-        // public List<WeatherDescription> weather { get; set; }
-        public MainWeatherInformation main { get; set; }
-        public int visibility { get; set; }
-        public int dt { get; set; }
-        public string name { get; set; }
+        public int CityWeatherId { get; set; }
+
+        [Column("CityId")]
+        public int Id { get; set; } // This is city id provided by OpenWeatherMap api
+        public Coord Coord { get; set; }
+        public Sys Sys { get; set; }
+        public List<WeatherDescription> Weather { get; set; }
+        public MainWeatherInformations Main { get; set; }
+        public int Visibility { get; set; }
+        public int Dt { get; set; }
+        public string Name { get; set; }
     }
 
-    public class MainWeatherInformation
+    public class MainWeatherInformations
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int id { get; set; }
-        public double temp { get; set; }
-        public double feels_like { get; set; }
-        public double temp_min { get; set; }
-        public double temp_max { get; set; }
-        public int pressure { get; set; }
-        public int humidity { get; set; }
-        public int? sea_level { get; set; }
-        public int? grnd_level { get; set; }
+        public int MainWeatherInformationId { get; set; }
+        public double Temp { get; set; }
+        public double FeelsLike { get; set; }
+        public double TempMin { get; set; }
+        public double TempMax { get; set; }
+        public int Pressure { get; set; }
+        public int Humidity { get; set; }
+        public int? SeaLevel { get; set; }
+        public int? GrndLevel { get; set; }
     }
 
-    public class CitiesWeather
+    public class CitiesWeatherWrapper
     {
-        public int cnt { get; set; }
-        public List<CityWeather> list { get; set; }
+        public int Cnt { get; set; }
+        public List<CityWeather> List { get; set; }
     }
 
     public class Coord
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int id { get; set; }
-        public double lon { get; set; }
-        public double lat { get; set; }
+        public int CoordId { get; set; }
+        public double Lon { get; set; }
+        public double Lat { get; set; }
     }
 
     public class Sys
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int id { get; set; }
-        public string country { get; set; }
-        public int timezone { get; set; }
-        public int sunrise { get; set; }
-        public int sunset { get; set; }
+        public int SysId { get; set; }
+        public string Country { get; set; }
+        public int Timezone { get; set; }
+        public int Sunrise { get; set; }
+        public int Sunset { get; set; }
     }
 
     public class WeatherDescription
     {
         [Key]
-        public int id { get; set; }
-        public string main { get; set; }
-        public string description { get; set; }
-        public string icon { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int WeatherDescriptionId { get; set; }
+        public string Main { get; set; }
+        public string Description { get; set; }
+        public string Icon { get; set; }
     }
 }

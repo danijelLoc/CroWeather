@@ -1,20 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using CroWeatherUpdateService.Model;
 using Microsoft.EntityFrameworkCore;
 
-namespace CroWeatherUpdateService.Model
+namespace CroWeatherUpdateService.WeatherContext
 {
-    class WeatherResultContext: DbContext
+    class WeatherContext: DbContext
     {
         public DbSet<CityWeather> WeatherResults { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
+            // User "admin" with table creation rights is needed in server
             optionsBuilder.UseSqlServer(@"Server=.\SQLEXPRESS;Database=WeatherDB;Trusted_Connection=False;user=admin;password=admin");
-            optionsBuilder.EnableSensitiveDataLogging();
         }
     }
 }

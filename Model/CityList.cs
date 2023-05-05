@@ -9,31 +9,31 @@ namespace CroWeatherUpdateService.Model
 {
     public class Coordinate
     {
-        public float lon { get; set; }
-        public float lat { get; set; }
+        public float Lon { get; set; }
+        public float Lat { get; set; }
 
     }
     public class City
     {
-        public long id { get; set; }
-        public string name { get; set; }
-        public string state { get; set; }
-        public string country { get; set; }
-        public Coordinate coord { get; set; }
+        public long Id { get; set; }
+        public string Name { get; set; }
+        public string State { get; set; }
+        public string Country { get; set; }
+        public Coordinate Coord { get; set; }
     }
     public class CityList
     {
         public static List<City> ListOfCitiesInCroatia()
         {
             MemoryStream memoryStream = new MemoryStream(Resources.CroCityList);
-            List<City> cities = JsonSerializer.Deserialize<List<City>>(memoryStream).Where(city => city.country.Equals("HR")).ToList();
+            List<City> cities = JsonSerializer.Deserialize<List<City>>(memoryStream, JsonSerializerCustomOptions.SnakeCaseJsonSerializerOptions).Where(city => city.Country.Equals("HR")).ToList();
             return cities;
         }
 
         public static List<string> IdsOfCitiesInCroatia()
         {
             List<City> cities = ListOfCitiesInCroatia();
-            List<string> citiesIds = cities.ConvertAll<string>(city => city.id.ToString());
+            List<string> citiesIds = cities.ConvertAll<string>(city => city.Id.ToString());
             return citiesIds;
         }
     }

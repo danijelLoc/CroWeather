@@ -1,62 +1,55 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http;
 using System.ServiceProcess;
-using System.Text.Json;
 using System.Threading.Tasks;
 using CroWeatherUpdateService.Model;
+using CroWeatherUpdateService.WeatherClient;
+using CroWeatherUpdateService.WeatherContext;
 
 namespace CroWeatherUpdateService
 {
     static class Program
     {
-        static async Task FetchWeatherData() // TODO: Extract to dedicated functions
+
+        static async Task FetchAndSaveWeatherForAllCities()
         {
-            Console.WriteLine("One Service call simulation ---");
+            var weatherFetcher = new CitiyWeatherFetcher();
+            var weatherSaver = new CityWeatherSaver();
 
 
-            var dbContext = new WeatherResultContext();
-            dbContext.Database.EnsureCreated(); // Solution without migrations for easier sharing and testing
-            dbContext.WeatherResults.Count();
+            List<City> croatianCitiesIds = CityList.ListOfCitiesInCroatia();
 
-            HttpClient client = new HttpClient();
-            String weatherApiKey = "57f95bfc61602811e7ad61d65bbc773d";
-
-            List<String> croatianCitiesIds = CityList.IdsOfCitiesInCroatia();
-            String croatianCitiesIdsParameter = String.Join(",", croatianCitiesIds.Take(20));
-            // var content = response.Content.ReadAsAsync<WeatherDto>().Result;
-
-            String weatherApiUrl = String.Format("https://api.openweathermap.org/data/2.5/group?units=metric&id={0}&appid={1}", croatianCitiesIdsParameter, weatherApiKey);
-            HttpResponseMessage response = (await client.GetAsync(weatherApiUrl));
-            if (response.IsSuccessStatusCode)
+            int i = 0;
+            int numberOfFetched = 0;
+            do
             {
-                var jstring = await response.Content.ReadAsStringAsync();
-                var citiesWeather = JsonSerializer.Deserialize<CitiesWeather>(jstring);
-                dbContext.WeatherResults.AddRange(citiesWeather.list);
-            } else
-            {
-                Console.WriteLine(response.StatusCode);
-            }
-
-
-
+                List<CityWeather> citiesWeather = await weatherFetcher.FetchCitiesWeatherData(croatianCitiesIds.Skip(i).Take(CitiyWeatherFetcher.maxCityIdsPerCall).ToList());
+                weatherSaver.SaveCitiesWeather(citiesWeather);
+                numberOfFetched += citiesWeather.Count();
+                i += CitiyWeatherFetcher.maxCityIdsPerCall;
+            } 
+            while (i < croatianCitiesIds.Count);
+            Console.WriteLine(String.Format("\nGiven {0} cities, fetched and saved {1} weather reports\n", croatianCitiesIds.Count(), numberOfFetched));
         }
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
         static void Main()
         {
+            /*
             if (System.Diagnostics.Debugger.IsAttached)
             {
-                Task.WaitAll(FetchWeatherData());
+                Console.WriteLine("<<<<<<<<<<<<<<< One Service call simulation >>>>>>>>>>>>>>>>>>");
+                Task.WaitAll(FetchAndSaveWeatherForAllCities());
             }
             else
+            */
             {
                 ServiceBase[] ServicesToRun;
                 ServicesToRun = new ServiceBase[]
                 {
-                new Service1()
+                    new CroWeatherUpdateService()
                 };
                 ServiceBase.Run(ServicesToRun);
             }
