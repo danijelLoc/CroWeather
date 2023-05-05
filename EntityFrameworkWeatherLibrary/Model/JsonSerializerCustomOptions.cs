@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using System.Text.Json;
 
-namespace CroWeatherUpdateService.Model
+namespace WeatherDomainLibrary.Model
 {
     public class SnakeCaseNamingPolicy : JsonNamingPolicy
     {
@@ -10,7 +10,7 @@ namespace CroWeatherUpdateService.Model
             return string.Concat(name.Select((x, i) => i > 0 && char.IsUpper(x) ? "_" + x.ToString() : x.ToString())).ToLower();
         }
     }
-    class JsonSerializerCustomOptions
+    public class JsonSerializerCustomOptions
     {
 
         public static JsonSerializerOptions SnakeCaseJsonSerializerOptions = new JsonSerializerOptions

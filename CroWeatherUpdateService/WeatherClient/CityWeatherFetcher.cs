@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
-using CroWeatherUpdateService.Model;
+using WeatherDomainLibrary.Model;
 
 namespace CroWeatherUpdateService.WeatherClient
 {
-    class CitiyWeatherFetcher
+    class CityWeatherFetcher
     {
         private readonly HttpClient client = new HttpClient();
         private readonly String weatherApiKey = "57f95bfc61602811e7ad61d65bbc773d";
@@ -21,16 +21,12 @@ namespace CroWeatherUpdateService.WeatherClient
             String citiesIdsParameter = String.Join(",", citiesIds);
             String weatherApiUrl = String.Format("{0}?units=metric&id={1}&appid={2}", weatherApiBaseUrl, citiesIdsParameter, weatherApiKey);
            
-            // Console.WriteLine(weatherApiUrl);
-            Console.WriteLine(String.Format("Fetching cities: {0}", String.Join(", ", cities.ConvertAll<string>(city => city.Name))));
-
             HttpResponseMessage response = (await client.GetAsync(weatherApiUrl));
             if (response.IsSuccessStatusCode)
             {
                 var jstring = await response.Content.ReadAsStringAsync();
                 var citiesWeather = JsonSerializer.Deserialize<CitiesWeatherWrapper>(jstring, JsonSerializerCustomOptions.SnakeCaseJsonSerializerOptions);
                 return citiesWeather.List;
-
             }
             else
             {

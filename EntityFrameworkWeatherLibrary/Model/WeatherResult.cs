@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CroWeatherUpdateService.Model
+namespace WeatherDomainLibrary.Model
 {
     public class CityWeather
     {

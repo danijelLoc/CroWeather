@@ -1,9 +1,9 @@
-﻿using CroWeatherUpdateService.Model;
+﻿using WeatherDomainLibrary.Model;
 using Microsoft.EntityFrameworkCore;
 
-namespace CroWeatherUpdateService.WeatherContext
+namespace WeatherDomainLibrary.WeatherContext
 {
-    class WeatherContext: DbContext
+    public class WeatherContext: DbContext
     {
         public DbSet<CityWeather> WeatherResults { get; set; }
 

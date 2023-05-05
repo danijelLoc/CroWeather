@@ -1,27 +1,16 @@
-﻿using System;
+﻿using CroWeatherUpdateService.Properties;
+using WeatherDomainLibrary.Model;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text.Json;
 using System.IO;
-using CroWeatherUpdateService.Properties;
+using System.Linq;
+using System.Text;
+using System.Text.Json;
+using System.Threading.Tasks;
 
-namespace CroWeatherUpdateService.Model
+namespace CroWeatherUpdateService.WeatherClient
 {
-    public class Coordinate
-    {
-        public float Lon { get; set; }
-        public float Lat { get; set; }
-
-    }
-    public class City
-    {
-        public long Id { get; set; }
-        public string Name { get; set; }
-        public string State { get; set; }
-        public string Country { get; set; }
-        public Coordinate Coord { get; set; }
-    }
-    public class CityList
+    public class CroCityList
     {
         public static List<City> ListOfCitiesInCroatia()
         {

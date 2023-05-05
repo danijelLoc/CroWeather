@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
-using CroWeatherUpdateService.Model;
+﻿using WeatherDomainLibrary.Model;
+using System.Collections.Generic;
 
-namespace CroWeatherUpdateService.WeatherContext
+namespace WeatherDomainLibrary.WeatherContext
 {
-    class CityWeatherSaver
+    public class CityWeatherSaver
     {
         private readonly WeatherContext dbContext;
 

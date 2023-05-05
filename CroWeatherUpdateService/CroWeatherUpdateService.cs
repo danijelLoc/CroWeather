@@ -1,13 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.ServiceProcess;
 using System.Threading.Tasks;
 using System.Timers;
-using CroWeatherUpdateService.Model;
-using CroWeatherUpdateService.Properties;
-using CroWeatherUpdateService.WeatherClient;
-using CroWeatherUpdateService.WeatherContext;
+using WeatherDomainLibrary.Model;
+using WeatherDomainLibrary.WeatherContext;
 
 namespace CroWeatherUpdateService
 {
@@ -40,11 +39,15 @@ namespace CroWeatherUpdateService
         [DllImport("advapi32.dll", SetLastError = true)]
         private static extern bool SetServiceStatus(System.IntPtr handle, ref ServiceStatus serviceStatus);
         private readonly EventLog eventLog;
+        private readonly WeatherUpdater weatherUpdater;
 
-        public CroWeatherUpdateService()
+        public CroWeatherUpdateService(List<City> listOfCities)
         {
             InitializeComponent();
+
             eventLog = new EventLog();
+            weatherUpdater = new WeatherUpdater(listOfCities);
+
             if (!EventLog.SourceExists("CroWeatherSource"))
             {
                 EventLog.CreateEventSource(
@@ -54,9 +57,9 @@ namespace CroWeatherUpdateService
             eventLog.Log = "CroWeatherNewLog";
         }
 
-        private void OnTimer(object sender, ElapsedEventArgs args)
+        private async void OnTimerAsync(object sender, ElapsedEventArgs args)
         {
-
+            await weatherUpdater.FetchAndSaveWeatherForAllCities();
         }
 
         protected override void OnStart(string[] args)
@@ -68,10 +71,11 @@ namespace CroWeatherUpdateService
             SetServiceStatus(this.ServiceHandle, ref serviceStatus);
 
             eventLog.WriteEntry(String.Format("+ CroWeatherService started. Time: {0}", DateTime.Now.ToString()));
+            Task.WaitAll(weatherUpdater.FetchAndSaveWeatherForAllCities());
 
             Timer timer = new Timer();
-            timer.Interval = 60000; // 60 seconds
-            timer.Elapsed += new ElapsedEventHandler(this.OnTimer);
+            timer.Interval = 300000; // 5 min
+            timer.Elapsed += new ElapsedEventHandler(this.OnTimerAsync);
             timer.Start();
 
             // Update the service state to Running.
