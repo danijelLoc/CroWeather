@@ -8,23 +8,6 @@ using System.Threading.Tasks;
 
 namespace WeatherDomainLibrary.Model
 {
-    public class CityWeather
-    {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int CityWeatherId { get; set; }
-
-        [Column("CityId")]
-        public int Id { get; set; } // This is city id provided by OpenWeatherMap api
-        public Coord Coord { get; set; }
-        public Sys Sys { get; set; }
-        public List<WeatherDescription> Weather { get; set; }
-        public MainWeatherInformations Main { get; set; }
-        public int Visibility { get; set; }
-        public int Dt { get; set; }
-        public string Name { get; set; }
-    }
-
     public class MainWeatherInformations
     {
         [Key]
@@ -38,12 +21,6 @@ namespace WeatherDomainLibrary.Model
         public int Humidity { get; set; }
         public int? SeaLevel { get; set; }
         public int? GrndLevel { get; set; }
-    }
-
-    public class CitiesWeatherWrapper
-    {
-        public int Cnt { get; set; }
-        public List<CityWeather> List { get; set; }
     }
 
     public class Coord

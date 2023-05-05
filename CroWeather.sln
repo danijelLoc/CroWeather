@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WeatherDomainLibrary", "Ent
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CroWeatherUpdateService", "CroWeatherUpdateService\CroWeatherUpdateService.csproj", "{FC8D5CD9-0461-416E-8A77-2F2579125D0F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CroWeatherApi", "CroWeatherApi\CroWeatherApi.csproj", "{24493559-5CA3-4F06-87DA-7001E5C5EA3E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{FC8D5CD9-0461-416E-8A77-2F2579125D0F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FC8D5CD9-0461-416E-8A77-2F2579125D0F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FC8D5CD9-0461-416E-8A77-2F2579125D0F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{24493559-5CA3-4F06-87DA-7001E5C5EA3E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{24493559-5CA3-4F06-87DA-7001E5C5EA3E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{24493559-5CA3-4F06-87DA-7001E5C5EA3E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{24493559-5CA3-4F06-87DA-7001E5C5EA3E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

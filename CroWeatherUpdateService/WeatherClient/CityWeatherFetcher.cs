@@ -15,7 +15,7 @@ namespace CroWeatherUpdateService.WeatherClient
 
         public static readonly int maxCityIdsPerCall = 20;
 
-        public async Task<List<CityWeather>> FetchCitiesWeatherData(List<City> cities)
+        public async Task<List<WeatherReport>> FetchCitiesWeatherData(List<City> cities)
         {
             List<String> citiesIds = cities.ConvertAll<string>(city => city.Id.ToString());
             String citiesIdsParameter = String.Join(",", citiesIds);
@@ -25,13 +25,13 @@ namespace CroWeatherUpdateService.WeatherClient
             if (response.IsSuccessStatusCode)
             {
                 var jstring = await response.Content.ReadAsStringAsync();
-                var citiesWeather = JsonSerializer.Deserialize<CitiesWeatherWrapper>(jstring, JsonSerializerCustomOptions.SnakeCaseJsonSerializerOptions);
+                var citiesWeather = JsonSerializer.Deserialize<WeatherResultsWrapper>(jstring, JsonSerializerCustomOptions.SnakeCaseJsonSerializerOptions);
                 return citiesWeather.List;
             }
             else
             {
                 Console.WriteLine(String.Format("Fetching error, response code: {0}", response.StatusCode));
-                return new List<CityWeather> { };
+                return new List<WeatherReport> { };
             }
         }
     }

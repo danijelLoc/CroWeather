@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WeatherDomainLibrary.Model;
-using WeatherDomainLibrary.WeatherContext;
+using WeatherDomainLibrary.WeatherRepository;
 using CroWeatherUpdateService.WeatherClient;
 
 namespace CroWeatherUpdateService
@@ -13,7 +13,7 @@ namespace CroWeatherUpdateService
     {
         private readonly List<City> listOfCities;
         private readonly CityWeatherFetcher weatherFetcher = new CityWeatherFetcher();
-        private readonly CityWeatherSaver weatherSaver = new CityWeatherSaver();
+        private readonly WeatherReportRepository weatherRepository = new WeatherReportRepository();
 
         public WeatherUpdater(List<City> listOfCities)
         {
@@ -26,8 +26,8 @@ namespace CroWeatherUpdateService
             int numberOfFetched = 0;
             do
             {
-                List<CityWeather> citiesWeather = await weatherFetcher.FetchCitiesWeatherData(listOfCities.Skip(i).Take(CityWeatherFetcher.maxCityIdsPerCall).ToList());
-                weatherSaver.SaveCitiesWeather(citiesWeather);
+                List<WeatherReport> citiesWeather = await weatherFetcher.FetchCitiesWeatherData(listOfCities.Skip(i).Take(CityWeatherFetcher.maxCityIdsPerCall).ToList());
+                weatherRepository.SaveCitiesWeather(citiesWeather);
                 numberOfFetched += citiesWeather.Count();
                 i += CityWeatherFetcher.maxCityIdsPerCall;
             }

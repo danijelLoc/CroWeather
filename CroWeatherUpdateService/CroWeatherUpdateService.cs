@@ -6,7 +6,7 @@ using System.ServiceProcess;
 using System.Threading.Tasks;
 using System.Timers;
 using WeatherDomainLibrary.Model;
-using WeatherDomainLibrary.WeatherContext;
+using WeatherDomainLibrary.WeatherRepository;
 
 namespace CroWeatherUpdateService
 {
@@ -37,7 +37,7 @@ namespace CroWeatherUpdateService
     {
 
         [DllImport("advapi32.dll", SetLastError = true)]
-        private static extern bool SetServiceStatus(System.IntPtr handle, ref ServiceStatus serviceStatus);
+        private static extern bool SetServiceStatus(IntPtr handle, ref ServiceStatus serviceStatus);
         private readonly EventLog eventLog;
         private readonly WeatherUpdater weatherUpdater;
 
@@ -65,37 +65,41 @@ namespace CroWeatherUpdateService
         protected override void OnStart(string[] args)
         {
             // Update the service state to Start Pending.
-            ServiceStatus serviceStatus = new ServiceStatus();
-            serviceStatus.dwCurrentState = ServiceState.SERVICE_START_PENDING;
-            serviceStatus.dwWaitHint = 100000;
-            SetServiceStatus(this.ServiceHandle, ref serviceStatus);
+            ServiceStatus serviceStatus = new ServiceStatus
+            {
+                dwCurrentState = ServiceState.SERVICE_START_PENDING,
+                dwWaitHint = 100000
+            };
+            SetServiceStatus(ServiceHandle, ref serviceStatus);
 
             eventLog.WriteEntry(String.Format("+ CroWeatherService started. Time: {0}", DateTime.Now.ToString()));
             Task.WaitAll(weatherUpdater.FetchAndSaveWeatherForAllCities());
 
             Timer timer = new Timer();
             timer.Interval = 300000; // 5 min
-            timer.Elapsed += new ElapsedEventHandler(this.OnTimerAsync);
+            timer.Elapsed += new ElapsedEventHandler(OnTimerAsync);
             timer.Start();
 
             // Update the service state to Running.
             serviceStatus.dwCurrentState = ServiceState.SERVICE_RUNNING;
-            SetServiceStatus(this.ServiceHandle, ref serviceStatus);
+            SetServiceStatus(ServiceHandle, ref serviceStatus);
         }
 
         protected override void OnStop()
         {
             // Update the service state to Stop Pending.
-            ServiceStatus serviceStatus = new ServiceStatus();
-            serviceStatus.dwCurrentState = ServiceState.SERVICE_STOP_PENDING;
-            serviceStatus.dwWaitHint = 100000;
-            SetServiceStatus(this.ServiceHandle, ref serviceStatus);
+            ServiceStatus serviceStatus = new ServiceStatus
+            {
+                dwCurrentState = ServiceState.SERVICE_STOP_PENDING,
+                dwWaitHint = 100000
+            };
+            SetServiceStatus(ServiceHandle, ref serviceStatus);
 
             eventLog.WriteEntry(String.Format("- CroWeatherService stopped. Time: {0}", DateTime.Now.ToString()));
 
             // Update the service state to Stopped.
             serviceStatus.dwCurrentState = ServiceState.SERVICE_STOPPED;
-            SetServiceStatus(this.ServiceHandle, ref serviceStatus);
+            SetServiceStatus(ServiceHandle, ref serviceStatus);
         }
     }
 }

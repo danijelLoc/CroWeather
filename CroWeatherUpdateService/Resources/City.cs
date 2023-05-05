@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace WeatherDomainLibrary.Model
+namespace CroWeatherUpdateService
 {
     public class Coordinate
     {

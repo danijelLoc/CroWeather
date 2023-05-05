@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.ServiceProcess;
 using System.Threading.Tasks;
-using CroWeatherUpdateService.WeatherClient;
-using WeatherDomainLibrary.Model;
-using WeatherDomainLibrary.WeatherContext;
 
 namespace CroWeatherUpdateService
 {

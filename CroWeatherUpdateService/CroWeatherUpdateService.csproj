@@ -181,6 +181,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Resources\City.cs" />
     <Compile Include="WeatherUpdater.cs" />
     <Compile Include="ProjectInstaller.cs">
       <SubType>Component</SubType>
