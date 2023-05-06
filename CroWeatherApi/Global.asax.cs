@@ -1,6 +1,6 @@
-﻿using System.Web.Http;
-using System.Web.Mvc;
-using System.Web.Routing;
+﻿using System.Data.SqlClient;
+using System.Web.Http;
+using WeatherDomainLibrary.WeatherRepository;
 
 namespace CroWeatherApi
 {
@@ -8,7 +8,6 @@ namespace CroWeatherApi
     {
         protected void Application_Start()
         {
-
             GlobalConfiguration.Configure(WebApiConfig.Register);
         }
     }

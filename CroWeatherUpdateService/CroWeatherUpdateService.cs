@@ -76,7 +76,7 @@ namespace CroWeatherUpdateService
             Task.WaitAll(weatherUpdater.FetchAndSaveWeatherForAllCities());
 
             Timer timer = new Timer();
-            timer.Interval = 300000; // 5 min
+            timer.Interval = 8 * 60 * 1000; // 8 min
             timer.Elapsed += new ElapsedEventHandler(OnTimerAsync);
             timer.Start();
 

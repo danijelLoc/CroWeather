@@ -6,6 +6,7 @@ namespace WeatherDomainLibrary.WeatherRepository
     class WeatherReportContext: DbContext
     {
         public DbSet<WeatherReport> WeatherReports { get; set; }
+        public DbSet<MainWeatherInformations> MainWeatherInformations { get; set; }
 
         public static WeatherReportContext Create()
         {
@@ -15,7 +16,7 @@ namespace WeatherDomainLibrary.WeatherRepository
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             // User "admin" with table creation rights is needed in server, Windows auto connection had problems in service
-            optionsBuilder.UseSqlServer(@"Server=.\SQLEXPRESS;Database=WeatherDB;Trusted_Connection=False;user=admin;password=admin");
+            optionsBuilder.UseSqlServer(SQLExpressInfo.ConnectionSting);
         }
     }
 }

@@ -3,28 +3,30 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 
 namespace WeatherDomainLibrary.WeatherRepository
 {
     public class WeatherReportRepository
     {
-        private readonly WeatherReportContext dbContext;
-
-        public WeatherReportRepository()
+        private WeatherReportContext CreateDbContext() 
         {
-            dbContext = new WeatherReportContext();
+            // db context must be short lived, one per each db operation
+            var dbContext = new WeatherReportContext();
             dbContext.Database.EnsureCreated(); // Solution without migrations for easier sharing and testing
+            return dbContext;
         }
 
         public void SaveCitiesWeather(List<WeatherReport> weatherReports)
         {
+            var dbContext = CreateDbContext();
             dbContext.WeatherReports.AddRange(weatherReports);
             dbContext.SaveChanges();
         }
 
         public IQueryable<WeatherReport> GetWeatherReports()
         {
-            return dbContext.WeatherReports
+            return CreateDbContext().WeatherReports
                 .Include(x => x.Main)
                 .Include(x => x.Weather)
                 .Include(x => x.Coord)
@@ -33,41 +35,50 @@ namespace WeatherDomainLibrary.WeatherRepository
 
         public async Task<WeatherReport> GetWeatherReport(int weatherReportId)
         {
-            WeatherReport result = await dbContext.WeatherReports
+            WeatherReport result = await CreateDbContext().WeatherReports
                 .Where(x => x.WeatherReportId == weatherReportId)
                 .Include(x => x.Main)
                 .Include(x => x.Weather)
                 .Include(x => x.Coord)
                 .Include(x => x.Sys)
-                .FirstAsync();
+                .FirstOrDefaultAsync();
 
             return result;
         }
 
-        public async Task<List<WeatherReport>> GetWeatherReportsForCity(string cityName) 
+        public IQueryable<WeatherReport> GetWeatherReportsForCity(string cityName) 
         {
-            IQueryable<WeatherReport> query = dbContext.WeatherReports.Where(x => x.Name == cityName)
+            IQueryable<WeatherReport> query = CreateDbContext().WeatherReports.Where(x => x.Name == cityName)
                 .Include(x => x.Main)
                 .Include(x => x.Weather)
                 .Include(x => x.Coord)
                 .Include(x => x.Sys);
 
-            List<WeatherReport> result = await query.ToListAsync();
-            return result;
+            return query;
         }
 
         public async Task<WeatherReport> GetLatestWeatherReportForCity(string cityName)
         {
-            WeatherReport result = await dbContext.WeatherReports
+            WeatherReport result = await CreateDbContext().WeatherReports
                 .Where(x => x.Name == cityName)
                 .OrderByDescending(x => x.Dt)
                 .Include(x => x.Main)
                 .Include(x => x.Weather)
                 .Include(x => x.Coord)
                 .Include(x => x.Sys)
-                .FirstAsync();
+                .FirstOrDefaultAsync();
 
             return result;
         }
+
+        public object RunSqlQuery(string sqlQuery) 
+        {
+            var results = CreateDbContext()
+                .WeatherReports
+                .FromSqlRaw(sqlQuery);
+            return results;
+        }
+
+
     }
 }
